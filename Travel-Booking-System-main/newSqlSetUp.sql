@@ -19,8 +19,8 @@ CREATE TABLE customer (
 CREATE TABLE airport (
     airport_number VARCHAR(10) PRIMARY KEY,
     airport_id INT AUTO_INCREMENT UNIQUE,
-    airport_name VARCHAR(30),
-    airport_location VARCHAR(50)
+    airport_name VARCHAR(100),
+    airport_location VARCHAR(100)
 );
 
 

@@ -7,10 +7,10 @@ import Application.Exceptions.DaoException;
 
 public class MySqlDao {
     public Connection getConnection() throws DaoException {
-        String driver = "com.mysql.jdbc.Driver";
+        String driver = "com.mysql.cj.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/travel_booking_system";
         String username = "root";
-        String password = "";
+        String password = "root";
         Connection connection = null;
 
         try {
