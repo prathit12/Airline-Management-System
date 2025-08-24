@@ -2,7 +2,7 @@
 
 This repository contains the original Travel Booking System alongside a Spring Boot application located in `spring-boot-app`.
 
-The Spring Boot application reuses the existing DAO and DTO packages to expose REST services modeled after the legacy client and server.
+The Spring Boot module reuses the existing DAO and DTO packages to expose REST services modeled after the legacy client/server architecture.
 
 ## Flight endpoints
 
@@ -10,6 +10,13 @@ The Spring Boot application reuses the existing DAO and DTO packages to expose R
 - `GET /flights/{flightNumber}` – retrieve a flight by number
 - `POST /flights` – insert a flight (JSON body matching `Application.DTOs.Flight`)
 - `DELETE /flights/{flightNumber}` – delete a flight by number
+
+## Airport endpoints
+
+- `GET /airports` – list all airports
+- `GET /airports/{airportNumber}` – retrieve an airport by number
+- `POST /airports` – insert an airport (JSON body matching `Application.DTOs.Airport`)
+- `DELETE /airports/{airportNumber}` – delete an airport by number
 
 ## Building
 
@@ -26,3 +33,5 @@ mvn spring-boot:run
 ```
 
 The application will start on [http://localhost:8080](http://localhost:8080).
+
+Database connection settings can be adjusted in `spring-boot-app/src/main/resources/application.properties`.
