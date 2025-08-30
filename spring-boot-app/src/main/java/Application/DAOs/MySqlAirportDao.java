@@ -106,6 +106,21 @@ public class MySqlAirportDao extends MySqlDao implements AirportDaoInterface {
     }
 
     @Override
+    public Airport updateAirport(Airport airport) throws DaoException {
+        try {
+            String query = "UPDATE airport SET airport_name = ?, airport_location = ? WHERE airport_number = ?";
+            int rowsAffected = helperConnection.executeUpdate(query, airport.getAirport_name(), airport.getAirport_location(), airport.getAirport_number());
+            if (rowsAffected == 1) {
+                return findAirportByNumber(airport.getAirport_number());
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new DaoException("updateAirport() " + e.getMessage());
+        }
+    }
+
+    @Override
     public Set<String> uniqueAirportLocation() throws DaoException {
         Set<String> airportLocations = new HashSet<>();
         try {

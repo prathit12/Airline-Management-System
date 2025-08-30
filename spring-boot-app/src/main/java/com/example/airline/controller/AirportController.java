@@ -33,6 +33,13 @@ public class AirportController {
         return airportService.insertAirport(airport);
     }
 
+    @PutMapping("/{airportNumber}")
+    public ResponseEntity<Airport> updateAirport(@PathVariable String airportNumber, @RequestBody Airport airport) throws DaoException {
+        airport.setAirport_number(airportNumber); // Ensure the airport number matches the path
+        Airport updatedAirport = airportService.updateAirport(airport);
+        return updatedAirport != null ? ResponseEntity.ok(updatedAirport) : ResponseEntity.notFound().build();
+    }
+
     @DeleteMapping("/{airportNumber}")
     public ResponseEntity<Void> deleteAirport(@PathVariable String airportNumber) throws DaoException {
         boolean deleted = airportService.deleteAirportByNumber(airportNumber);

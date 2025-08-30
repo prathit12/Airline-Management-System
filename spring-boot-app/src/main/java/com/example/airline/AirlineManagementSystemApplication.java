@@ -3,7 +3,7 @@ package com.example.airline;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"com.example.airline", "Application"})
+@SpringBootApplication
 public class AirlineManagementSystemApplication {
 
     public static void main(String[] args) {

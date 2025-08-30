@@ -16,6 +16,8 @@ public interface AirportDaoInterface {
 
     Airport insertAirport(Airport airport) throws DaoException;
 
+    Airport updateAirport(Airport airport) throws DaoException;
+
     Set<String> uniqueAirportLocation() throws DaoException;
 
     List<Airport> findAirportByLocation(String airportLocation) throws DaoException;

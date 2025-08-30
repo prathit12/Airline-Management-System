@@ -12,6 +12,11 @@ import java.util.List;
 public class AirportService {
     private final AirportDaoInterface airportDao = new MySqlAirportDao();
 
+    public AirportService() throws DaoException {
+        // Initialize the airport cache on startup
+        airportDao.populateAirportCache();
+    }
+
     public List<Airport> findAllAirports() throws DaoException {
         return airportDao.findAllAirports();
     }
@@ -22,6 +27,10 @@ public class AirportService {
 
     public Airport insertAirport(Airport airport) throws DaoException {
         return airportDao.insertAirport(airport);
+    }
+
+    public Airport updateAirport(Airport airport) throws DaoException {
+        return airportDao.updateAirport(airport);
     }
 
     public boolean deleteAirportByNumber(String airportNumber) throws DaoException {
