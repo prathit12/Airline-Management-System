@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Airline Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .auth-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-header h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .form-group input.error {
+            border-color: #dc3545;
+        }
+        
+        .form-group .field-error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        
+        .btn-primary:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .auth-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .auth-links a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .home-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .home-link:hover {
+            text-decoration: underline;
+        }
+        
+        .password-requirements {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="home-link">← Back to Home</a>
+    
+    <div class="auth-container">
+        <div class="auth-header">
+            <h2>Create Your Account</h2>
+            <p>Join our airline management system</p>
+        </div>
+        
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+        
+        <form id="registerForm" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" name="username" required minlength="3" maxlength="50">
+                <div id="usernameError" class="field-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" name="email" required maxlength="100">
+                <div id="emailError" class="field-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required minlength="6">
+                <div class="password-requirements">Minimum 6 characters</div>
+                <div id="passwordError" class="field-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password *</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <div id="confirmPasswordError" class="field-error"></div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" maxlength="50">
+                </div>
+                
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" maxlength="50">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" maxlength="20">
+            </div>
+            
+            <button type="submit" id="registerButton" class="btn-primary">
+                Create Account
+            </button>
+            
+            <div id="loading" class="loading">
+                <p>Creating account...</p>
+            </div>
+        </form>
+        
+        <div class="auth-links">
+            <p>Already have an account? <a href="/login">Sign in here</a></p>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already logged in
+            if (isLoggedIn()) {
+                window.location.href = '/dashboard';
+                return;
+            }
+            
+            const registerForm = document.getElementById('registerForm');
+            const registerButton = document.getElementById('registerButton');
+            const loading = document.getElementById('loading');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Real-time validation
+            const username = document.getElementById('username');
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            
+            username.addEventListener('blur', checkUsernameAvailability);
+            email.addEventListener('blur', checkEmailAvailability);
+            confirmPassword.addEventListener('input', validatePasswordConfirmation);
+            
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!validateForm()) {
+                    return;
+                }
+                
+                setLoading(true);
+                hideMessages();
+                
+                try {
+                    const formData = {
+                        username: username.value,
+                        email: email.value,
+                        password: password.value,
+                        firstName: document.getElementById('firstName').value || null,
+                        lastName: document.getElementById('lastName').value || null,
+                        phoneNumber: document.getElementById('phoneNumber').value || null
+                    };
+                    
+                    const response = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.success) {
+                        showSuccess('Account created successfully! Please check your email for verification. You can now login.');
+                        registerForm.reset();
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 3000);
+                    } else {
+                        if (data.errors) {
+                            displayFieldErrors(data.errors);
+                        } else {
+                            showError(data.message || 'Registration failed. Please try again.');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showError('An error occurred. Please try again.');
+                } finally {
+                    setLoading(false);
+                }
+            });
+            
+            async function checkUsernameAvailability() {
+                const usernameValue = username.value.trim();
+                if (usernameValue.length < 3) return;
+                
+                try {
+                    const response = await fetch(`/api/auth/check-username?username=${encodeURIComponent(usernameValue)}`);
+                    const data = await response.json();
+                    
+                    if (!data.available) {
+                        showFieldError('username', 'Username is already taken');
+                    } else {
+                        clearFieldError('username');
+                    }
+                } catch (error) {
+                    console.error('Username check error:', error);
+                }
+            }
+            
+            async function checkEmailAvailability() {
+                const emailValue = email.value.trim();
+                if (!emailValue || !isValidEmail(emailValue)) return;
+                
+                try {
+                    const response = await fetch(`/api/auth/check-email?email=${encodeURIComponent(emailValue)}`);
+                    const data = await response.json();
+                    
+                    if (!data.available) {
+                        showFieldError('email', 'Email is already registered');
+                    } else {
+                        clearFieldError('email');
+                    }
+                } catch (error) {
+                    console.error('Email check error:', error);
+                }
+            }
+            
+            function validatePasswordConfirmation() {
+                if (confirmPassword.value && password.value !== confirmPassword.value) {
+                    showFieldError('confirmPassword', 'Passwords do not match');
+                } else {
+                    clearFieldError('confirmPassword');
+                }
+            }
+            
+            function validateForm() {
+                let isValid = true;
+                
+                // Clear previous errors
+                clearAllFieldErrors();
+                
+                // Username validation
+                if (username.value.trim().length < 3) {
+                    showFieldError('username', 'Username must be at least 3 characters');
+                    isValid = false;
+                }
+                
+                // Email validation
+                if (!isValidEmail(email.value)) {
+                    showFieldError('email', 'Please enter a valid email address');
+                    isValid = false;
+                }
+                
+                // Password validation
+                if (password.value.length < 6) {
+                    showFieldError('password', 'Password must be at least 6 characters');
+                    isValid = false;
+                }
+                
+                // Confirm password validation
+                if (password.value !== confirmPassword.value) {
+                    showFieldError('confirmPassword', 'Passwords do not match');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+            
+            function showFieldError(fieldName, message) {
+                const field = document.getElementById(fieldName);
+                const errorElement = document.getElementById(fieldName + 'Error');
+                
+                field.classList.add('error');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+            
+            function clearFieldError(fieldName) {
+                const field = document.getElementById(fieldName);
+                const errorElement = document.getElementById(fieldName + 'Error');
+                
+                field.classList.remove('error');
+                errorElement.style.display = 'none';
+            }
+            
+            function clearAllFieldErrors() {
+                const errorElements = document.querySelectorAll('.field-error');
+                const inputElements = document.querySelectorAll('input');
+                
+                errorElements.forEach(el => el.style.display = 'none');
+                inputElements.forEach(el => el.classList.remove('error'));
+            }
+            
+            function displayFieldErrors(errors) {
+                for (const [field, message] of Object.entries(errors)) {
+                    showFieldError(field, message);
+                }
+            }
+            
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+            
+            function setLoading(isLoading) {
+                registerButton.disabled = isLoading;
+                loading.style.display = isLoading ? 'block' : 'none';
+                registerButton.textContent = isLoading ? 'Creating Account...' : 'Create Account';
+            }
+            
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+                successMessage.style.display = 'none';
+            }
+            
+            function showSuccess(message) {
+                successMessage.textContent = message;
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+            }
+            
+            function hideMessages() {
+                errorMessage.style.display = 'none';
+                successMessage.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

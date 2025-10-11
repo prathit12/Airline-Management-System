@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Airline Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-plane"></i> Airline Management System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item agent-only" style="display: none;">
+                        <a class="nav-link" href="/ui/customers">Customers</a>
+                    </li>
+                    <li class="nav-item manager-only" style="display: none;">
+                        <a class="nav-link" href="/ui/airports">Airports</a>
+                    </li>
+                    <li class="nav-item agent-only" style="display: none;">
+                        <a class="nav-link" href="/ui/flights">Flights</a>
+                    </li>
+                    <li class="nav-item agent-only" style="display: none;">
+                        <a class="nav-link" href="/ui/bookings">Bookings</a>
+                    </li>
+                    <li class="nav-item agent-only" style="display: none;">
+                        <a class="nav-link" href="/ui/payments">Payments</a>
+                    </li>
+                    <li class="nav-item admin-only" style="display: none;">
+                        <a class="nav-link" href="/ui/admin">Admin Panel</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown user-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i> <span id="username">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                            <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item logout-link" href="#" onclick="logout()">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+        <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-tachometer-alt"></i> Dashboard</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="welcomeMessage" class="alert alert-info">
+                            <h5>Welcome back!</h5>
+                            <p class="mb-0">You are successfully logged in. Use the navigation menu to access different sections of the system.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Stats -->
+        <div class="row mt-4" id="userStatsSection">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6>My Bookings</h6>
+                                <h4 id="myBookingsCount">0</h4>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-ticket-alt fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6>Active Flights</h6>
+                                <h4 id="activeFlightsCount">0</h4>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-plane fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6>Total Spent</h6>
+                                <h4 id="totalSpent">$0</h4>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-dollar-sign fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6>Profile Status</h6>
+                                <h4 id="profileStatus">Complete</h4>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-user-check fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin/Manager Stats -->
+        <div class="row mt-4" id="systemStatsSection" style="display: none;">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-bar"></i> System Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2 text-center">
+                                <h3 class="text-primary" id="totalUsers">0</h3>
+                                <p>Total Users</p>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <h3 class="text-success" id="totalCustomers">0</h3>
+                                <p>Customers</p>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <h3 class="text-info" id="totalFlights">0</h3>
+                                <p>Flights</p>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <h3 class="text-warning" id="totalBookings">0</h3>
+                                <p>Bookings</p>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <h3 class="text-danger" id="totalPayments">0</h3>
+                                <p>Payments</p>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <h3 class="text-secondary" id="totalRevenue">$0</h3>
+                                <p>Revenue</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-bolt"></i> Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row" id="quickActionsRow">
+                            <!-- Actions will be populated based on user role -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-history"></i> Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentActivity">
+                            <p class="text-muted">Loading recent activity...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+        <div class="container">
+            <p>&copy; 2024 Airline Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (!requireAuth()) {
+                return;
+            }
+
+            // Update UI
+            updateAuthUI();
+            loadDashboardData();
+            setupQuickActions();
+            loadRecentActivity();
+        });
+
+        function loadDashboardData() {
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('username').textContent = user.username;
+                
+                // Update welcome message
+                document.getElementById('welcomeMessage').innerHTML = `
+                    <h5>Welcome back, ${user.username}!</h5>
+                    <p class="mb-0">You are successfully logged in. Use the navigation menu to access different sections of the system.</p>
+                `;
+            }
+
+            // Load user-specific stats
+            loadUserStats();
+            
+            // Load system stats if user has appropriate role
+            if (hasRole('ADMIN') || hasRole('MANAGER')) {
+                document.getElementById('systemStatsSection').style.display = 'block';
+                loadSystemStats();
+            }
+        }
+
+        async function loadUserStats() {
+            try {
+                // This would typically fetch user-specific data
+                // For now, showing placeholder data
+                document.getElementById('myBookingsCount').textContent = '0';
+                document.getElementById('activeFlightsCount').textContent = '0';
+                document.getElementById('totalSpent').textContent = '$0.00';
+                document.getElementById('profileStatus').textContent = 'Active';
+            } catch (error) {
+                console.error('Error loading user stats:', error);
+            }
+        }
+
+        async function loadSystemStats() {
+            try {
+                const response = await authenticatedFetch('/api/users/stats');
+                if (response.ok) {
+                    const stats = await response.json();
+                    document.getElementById('totalUsers').textContent = stats.totalUsers || '0';
+                    document.getElementById('totalCustomers').textContent = stats.activeUsers || '0';
+                }
+
+                // Load other stats from existing endpoints
+                loadBasicStats();
+            } catch (error) {
+                console.error('Error loading system stats:', error);
+                loadBasicStats();
+            }
+        }
+
+        function loadBasicStats() {
+            // Load from existing endpoints
+            authenticatedFetch('/customers')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalCustomers').textContent = data.length;
+                })
+                .catch(error => console.error('Error loading customers:', error));
+
+            authenticatedFetch('/flights')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalFlights').textContent = data.length;
+                })
+                .catch(error => console.error('Error loading flights:', error));
+
+            authenticatedFetch('/bookings')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalBookings').textContent = data.length;
+                })
+                .catch(error => console.error('Error loading bookings:', error));
+
+            authenticatedFetch('/api/payments')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalPayments').textContent = data.length;
+                    
+                    const totalRevenue = data.reduce((sum, payment) => sum + payment.amountPaid, 0);
+                    document.getElementById('totalRevenue').textContent = '$' + totalRevenue.toFixed(2);
+                })
+                .catch(error => console.error('Error loading payments:', error));
+        }
+
+        function setupQuickActions() {
+            const quickActionsRow = document.getElementById('quickActionsRow');
+            let actions = [];
+
+            if (hasRole('ADMIN')) {
+                actions = [
+                    { icon: 'fas fa-users-cog', title: 'Manage Users', link: '/ui/admin', color: 'primary' },
+                    { icon: 'fas fa-building', title: 'Manage Airports', link: '/ui/airports', color: 'success' },
+                    { icon: 'fas fa-plane', title: 'Manage Flights', link: '/ui/flights', color: 'info' },
+                    { icon: 'fas fa-chart-bar', title: 'View Reports', link: '/ui/reports', color: 'warning' }
+                ];
+            } else if (hasRole('MANAGER')) {
+                actions = [
+                    { icon: 'fas fa-building', title: 'Manage Airports', link: '/ui/airports', color: 'success' },
+                    { icon: 'fas fa-plane', title: 'Manage Flights', link: '/ui/flights', color: 'info' },
+                    { icon: 'fas fa-users', title: 'View Customers', link: '/ui/customers', color: 'primary' },
+                    { icon: 'fas fa-ticket-alt', title: 'View Bookings', link: '/ui/bookings', color: 'warning' }
+                ];
+            } else if (hasRole('AGENT')) {
+                actions = [
+                    { icon: 'fas fa-plane', title: 'View Flights', link: '/ui/flights', color: 'info' },
+                    { icon: 'fas fa-users', title: 'Manage Customers', link: '/ui/customers', color: 'primary' },
+                    { icon: 'fas fa-ticket-alt', title: 'Manage Bookings', link: '/ui/bookings', color: 'warning' },
+                    { icon: 'fas fa-credit-card', title: 'Process Payments', link: '/ui/payments', color: 'danger' }
+                ];
+            } else {
+                actions = [
+                    { icon: 'fas fa-plane', title: 'Search Flights', link: '/ui/flights', color: 'info' },
+                    { icon: 'fas fa-ticket-alt', title: 'My Bookings', link: '/ui/bookings', color: 'warning' },
+                    { icon: 'fas fa-user', title: 'My Profile', link: '/profile', color: 'primary' },
+                    { icon: 'fas fa-credit-card', title: 'Payment History', link: '/ui/payments', color: 'danger' }
+                ];
+            }
+
+            quickActionsRow.innerHTML = actions.map(action => `
+                <div class="col-md-3 mb-3">
+                    <a href="${action.link}" class="btn btn-${action.color} btn-lg w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+                        <i class="${action.icon} fa-2x mb-2"></i>
+                        <span>${action.title}</span>
+                    </a>
+                </div>
+            `).join('');
+        }
+
+        function loadRecentActivity() {
+            // Placeholder for recent activity
+            document.getElementById('recentActivity').innerHTML = `
+                <div class="list-group">
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">System Login</h6>
+                            <small>Just now</small>
+                        </div>
+                        <p class="mb-1">You successfully logged into the system.</p>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">Welcome to Airline Management System</h6>
+                            <small class="text-muted">Today</small>
+                        </div>
+                        <p class="mb-1">Your account is active and ready to use.</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
